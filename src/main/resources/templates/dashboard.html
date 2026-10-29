@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+ <head th:replace="~{fragments :: head('My application')}">
+ </head>
+ <body>
+  <header th:replace="~{fragments :: nav(false)}">
+  </header>
+  <main>
+   <div th:replace="~{fragments :: messages}">
+   </div>
+   <div th:replace="~{fragments :: activity}">
+   </div>
+   <p class="eyebrow">
+    My application
+   </p>
+   <h1 th:text="${'Hello, ' + teacher.name()}">
+   </h1>
+   <p>
+    Your application is
+    <strong class="status" th:classappend="${teacher.status().name().toLowerCase()}" th:text="${teacher.status().getLabel()}">
+    </strong>
+    .
+   </p>
+   <section>
+    <h2>
+     Application details
+    </h2>
+    <dl>
+     <dt>
+      Email
+     </dt>
+     <dd th:text="${teacher.email()}">
+     </dd>
+     <dt>
+      School
+     </dt>
+     <dd th:text="${teacher.school().name() + ' — ' + teacher.school().city()}">
+     </dd>
+     <dt>
+      Your message
+     </dt>
+     <dd class="multiline" th:text="${teacher.applicationMessage()}">
+     </dd>
+     <dt>
+      Administrator feedback
+     </dt>
+     <dd class="multiline" th:text="${#strings.isEmpty(teacher.feedback()) ? 'No feedback yet.' : teacher.feedback()}">
+     </dd>
+    </dl>
+    <a class="button" th:href="@{/teacher/profile}">
+     Edit my profile
+    </a>
+   </section>
+   <p class="muted">
+    Your place stays active when you navigate, submit a form, or type in your profile. Leaving this tab open does not keep your place.
+   </p>
+  </main>
+  <footer th:replace="~{fragments :: footer}">
+  </footer>
+ </body>
+</html>

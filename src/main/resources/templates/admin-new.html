@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+ <head th:replace="~{fragments :: head('Add teacher')}">
+ </head>
+ <body>
+  <header th:replace="~{fragments :: nav(true)}">
+  </header>
+  <main class="narrow">
+   <h1>
+    Add teacher account
+   </h1>
+   <p>
+    Choose a temporary local demo password and give it to the fictional teacher during the demonstration. The account starts Pending.
+   </p>
+   <form method="post" th:action="@{/admin/teachers/new}" th:object="${form}">
+    <div th:replace="~{fragments :: errors}">
+    </div>
+    <div th:replace="~{fragments :: profileFields}">
+    </div>
+    <label for="password">
+     Initial password
+    </label>
+    <input autocomplete="new-password" id="password" maxlength="64" minlength="10" name="password" required="" type="password"/>
+    <small>
+     10–64 ASCII characters. This demo has no password reset service.
+    </small>
+    <small class="error" th:errors="*{password}">
+    </small>
+    <button type="submit">
+     Add teacher
+    </button>
+   </form>
+  </main>
+ </body>
+</html>

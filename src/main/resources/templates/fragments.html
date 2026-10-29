@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+ <head th:fragment="head(title)">
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <title th:text="${title} + ' · Teacher Tracker'">
+   Teacher Tracker
+  </title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+  <meta name="csrf-token" th:content="${_csrf.token}" th:if="${_csrf}"/>
+  <meta name="csrf-header" th:content="${_csrf.headerName}" th:if="${_csrf}"/>
+ </head>
+ <body>
+  <header th:fragment="nav(admin)">
+   <a class="brand" th:href="${admin} ? @{/admin/teachers} : @{/teacher/dashboard}">
+    Teacher Tracker
+    <span>
+     SE 201
+    </span>
+   </a>
+   <nav aria-label="Main navigation">
+    <th:block th:if="${admin}">
+     <a th:href="@{/admin/teachers}">
+      Teachers
+     </a>
+     <a th:href="@{/admin/schools}">
+      Schools
+     </a>
+     <a th:href="@{/admin/admission}">
+      Waiting room
+     </a>
+    </th:block>
+    <th:block th:unless="${admin}">
+     <a th:href="@{/teacher/dashboard}">
+      My application
+     </a>
+     <a th:href="@{/teacher/profile}">
+      Edit profile
+     </a>
+    </th:block>
+    <form method="post" th:action="@{/logout}">
+     <button class="quiet" type="submit">
+      Log out
+     </button>
+    </form>
+   </nav>
+  </header>
+  <div th:fragment="messages">
+   <p class="notice" role="status" th:if="${notice}" th:text="${notice}">
+   </p>
+   <p class="error" role="alert" th:if="${problem}" th:text="${problem}">
+   </p>
+  </div>
+  <div th:fragment="profileFields">
+   <label for="name">
+    Full name
+   </label>
+   <input autocomplete="name" id="name" maxlength="120" required="" th:field="*{name}"/>
+   <small class="error" th:errors="*{name}">
+   </small>
+   <label for="email">
+    Email address
+   </label>
+   <input autocomplete="email" id="email" maxlength="254" required="" th:field="*{email}" type="email"/>
+   <small class="error" th:errors="*{email}">
+   </small>
+   <label for="schoolId">
+    School
+   </label>
+   <select id="schoolId" required="" th:field="*{schoolId}">
+    <option value="">
+     Choose a school
+    </option>
+    <option th:each="s : ${schools}" th:text="${s.name() + ' — ' + s.city()}" th:value="${s.id()}">
+    </option>
+   </select>
+   <small class="error" th:errors="*{schoolId}">
+   </small>
+   <label for="applicationMessage">
+    Application message
+   </label>
+   <textarea id="applicationMessage" maxlength="2000" required="" rows="4" th:field="*{applicationMessage}"></textarea>
+   <small class="error" th:errors="*{applicationMessage}">
+   </small>
+  </div>
+  <div class="error" role="alert" th:fragment="errors" th:if="${#fields.hasAnyErrors()}">
+   <p>
+    Please check the fields below.
+   </p>
+   <p th:each="e : ${#fields.globalErrors()}" th:text="${e}">
+   </p>
+  </div>
+  <div th:fragment="activity">
+   <p class="error" hidden="" id="expired" role="alert">
+    Your active place expired. You are still signed in. Copy any unsaved changes, then
+    <a th:href="@{/waiting}">
+     rejoin the waiting room
+    </a>
+    .
+   </p>
+   <script defer="" th:src="@{/js/activity.js}">
+   </script>
+  </div>
+  <footer th:fragment="footer">
+   Local course demonstration. All sample schools and accounts are fictional.
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,43 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 14
+skinparam ArrowColor #28594F
+skinparam classBackgroundColor #F1F7F3
+skinparam classBorderColor #456B63
+skinparam classAttributeIconSize 0
+title UC-06 Manage schools: selected implemented class diagram
+class School <<record>> {
+ - id : long
+ - name : String
+ - city : String
+ + School(id : long, name : String, city : String)
+ + id() : long
+ + name() : String
+ + city() : String
+}
+class SchoolService {
+ - jdbc : JdbcTemplate
+ + SchoolService(jdbc : JdbcTemplate)
+ + findAll() : List<School>
+ + findById(id : long) : School
+ + add(name : String, city : String) : void
+ + update(id : long, name : String, city : String) : void
+ + delete(id : long) : void
+}
+class JdbcTemplate <<framework>>
+SchoolService --> JdbcTemplate : parameterized SQL
+SchoolService ..> School : creates and returns
+note bottom of School
+Java record generates the canonical constructor
+and component accessors shown above.
+Object equality/hash/string methods are implicit.
+end note
+note bottom of SchoolService
+Every field, constructor and method shown
+exists in SchoolService.java.
+Referenced-school deletion is refused.
+end note
+@enduml

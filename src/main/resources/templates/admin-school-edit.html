@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+ <head th:replace="~{fragments :: head('Edit school')}">
+ </head>
+ <body>
+  <header th:replace="~{fragments :: nav(true)}">
+  </header>
+  <main class="narrow">
+   <h1>
+    Edit school
+   </h1>
+   <form method="post" th:action="@{/admin/schools/{id}(id=${schoolId})}" th:object="${form}">
+    <div th:replace="~{fragments :: errors}">
+    </div>
+    <label for="name">
+     School name
+    </label>
+    <input id="name" maxlength="120" required="" th:field="*{name}"/>
+    <small class="error" th:errors="*{name}">
+    </small>
+    <label for="city">
+     City
+    </label>
+    <input id="city" maxlength="120" required="" th:field="*{city}"/>
+    <small class="error" th:errors="*{city}">
+    </small>
+    <button type="submit">
+     Save school
+    </button>
+    <a th:href="@{/admin/schools}">
+     Cancel
+    </a>
+   </form>
+  </main>
+ </body>
+</html>

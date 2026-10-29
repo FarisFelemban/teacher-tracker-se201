@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+ <head th:replace="~{fragments :: head('Waiting room')}">
+ </head>
+ <body>
+  <header th:replace="~{fragments :: nav(false)}">
+  </header>
+  <main class="narrow">
+   <p class="eyebrow">
+    Teacher access
+   </p>
+   <h1>
+    Waiting room
+   </h1>
+   <p>
+    You are signed in. All active teacher places are currently occupied.
+   </p>
+   <p class="queue-number" id="queue-status" role="status" th:text="${admission.state().name() == 'BUSY' ? 'The queue is full. We will retry shortly.' : 'Your queue position: ' + admission.position()}">
+   </p>
+   <p>
+    Keep this page open. You will enter automatically when a place becomes available. Teachers enter in arrival order.
+   </p>
+   <p>
+    Leaving a dashboard idle releases its place. Application approval is separate from this waiting room.
+   </p>
+   <noscript>
+    <p>
+     JavaScript is disabled.
+     <a th:href="@{/waiting}">
+      Refresh your position
+     </a>
+     at least every 15 seconds to keep your place.
+    </p>
+   </noscript>
+   <p>
+    <a th:href="@{/waiting}">
+     Check again
+    </a>
+   </p>
+   <script defer="" th:src="@{/js/waiting.js}">
+   </script>
+  </main>
+  <footer th:replace="~{fragments :: footer}">
+  </footer>
+ </body>
+</html>

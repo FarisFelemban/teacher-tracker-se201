@@ -1,0 +1,42 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 14
+skinparam ArrowColor #28594F
+skinparam classBackgroundColor #F1F7F3
+skinparam classBorderColor #456B63
+skinparam classAttributeIconSize 0
+title UC-05 Review teacher application: valid review submission
+actor Administrator
+participant AdminController
+participant "review : Forms.Review" as Review
+participant TeacherService
+participant JdbcTemplate
+database "Local H2" as DB
+note over Administrator, AdminController
+Preconditions: administrator session, valid CSRF token,
+existing teacher, and successful MVC field validation.
+end note
+Administrator -> AdminController : POST /admin/teachers/{id}/review
+activate AdminController
+AdminController -> Review : getStatus()
+Review --> AdminController : status
+AdminController -> Review : getFeedback()
+Review --> AdminController : feedback
+AdminController -> TeacherService : review(id, status, feedback)
+activate TeacherService
+TeacherService -> JdbcTemplate : update(parameterized SQL, status, feedback, id)
+JdbcTemplate -> DB : UPDATE teacher_profile
+DB --> JdbcTemplate : affected row count
+JdbcTemplate --> TeacherService : row count
+TeacherService --> AdminController : completed
+ deActivate TeacherService
+AdminController --> Administrator : redirect to record with confirmation
+deactivate AdminController
+note over TeacherService, DB
+The transaction commits the update before success returns.
+If no row matches, TeacherService raises a 404 response.
+end note
+@enduml

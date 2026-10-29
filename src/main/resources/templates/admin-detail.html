@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+ <head th:replace="~{fragments :: head('Teacher record')}">
+ </head>
+ <body>
+  <header th:replace="~{fragments :: nav(true)}">
+  </header>
+  <main>
+   <div th:replace="~{fragments :: messages}">
+   </div>
+   <p>
+    <a th:href="@{/admin/teachers}">
+     Back to teachers
+    </a>
+   </p>
+   <h1 th:text="${teacher.name()}">
+   </h1>
+   <p>
+    Current status:
+    <strong th:text="${teacher.status().getLabel()}">
+    </strong>
+   </p>
+   <div class="columns">
+    <section>
+     <h2>
+      Teacher details
+     </h2>
+     <form method="post" th:action="@{/admin/teachers/{id}(id=${teacher.accountId()})}" th:object="${form}">
+      <div th:replace="~{fragments :: errors}">
+      </div>
+      <div th:replace="~{fragments :: profileFields}">
+      </div>
+      <button type="submit">
+       Save teacher details
+      </button>
+     </form>
+    </section>
+    <section>
+     <h2>
+      Application review
+     </h2>
+     <form method="post" th:action="@{/admin/teachers/{id}/review(id=${teacher.accountId()})}" th:object="${review}">
+      <div th:replace="~{fragments :: errors}">
+      </div>
+      <label for="status">
+       Application status
+      </label>
+      <select id="status" required="" th:field="*{status}">
+       <option th:each="s : ${statuses}" th:text="${s.getLabel()}" th:value="${s}">
+       </option>
+      </select>
+      <label for="feedback">
+       Feedback for the teacher
+      </label>
+      <textarea id="feedback" maxlength="2000" rows="5" th:field="*{feedback}"></textarea>
+      <small class="error" th:errors="*{feedback}">
+      </small>
+      <button type="submit">
+       Save application review
+      </button>
+     </form>
+     <h2 class="danger-title">
+      Delete account
+     </h2>
+     <p>
+      This removes the teacher account, profile and waiting-room membership.
+     </p>
+     <form method="post" th:action="@{/admin/teachers/{id}/delete(id=${teacher.accountId()})}">
+      <label class="check">
+       <input required="" type="checkbox"/>
+       I confirm deletion of this teacher account.
+      </label>
+      <button class="danger" type="submit">
+       Delete teacher account
+      </button>
+     </form>
+    </section>
+   </div>
+  </main>
+ </body>
+</html>

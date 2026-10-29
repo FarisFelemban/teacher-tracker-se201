@@ -1,0 +1,63 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 14
+skinparam ArrowColor #28594F
+skinparam classBackgroundColor #F1F7F3
+skinparam classBorderColor #456B63
+skinparam classAttributeIconSize 0
+title UC-05 Review teacher application: scenario class view
+class AdminController <<scenario view>> {
+ - teachers : TeacherService
+ + review(id : long, review : Forms.Review, errors : BindingResult, model : Model, redirect : RedirectAttributes) : String
+}
+class "Forms.Review" as Review {
+ - status : ApplicationStatus
+ - feedback : String
+ + getStatus() : ApplicationStatus
+ + setStatus(v : ApplicationStatus) : void
+ + getFeedback() : String
+ + setFeedback(v : String) : void
+}
+class TeacherService <<scenario view>> {
+ - jdbc : JdbcTemplate
+ + findById(id : long) : TeacherProfile
+ + review(id : long, status : ApplicationStatus, feedback : String) : void
+}
+class TeacherProfile <<record>> {
+ - accountId : long
+ - name : String
+ - email : String
+ - school : School
+ - applicationMessage : String
+ - status : ApplicationStatus
+ - feedback : String
+}
+class School <<record>> {
+ - id : long
+ - name : String
+ - city : String
+}
+enum ApplicationStatus {
+ PENDING
+ APPROVED
+ REJECTED
+}
+class JdbcTemplate <<framework>>
+class "Local H2" as H2 <<external database>>
+JdbcTemplate --> H2 : persists reviews
+AdminController --> TeacherService
+AdminController ..> Review : validates
+Review --> ApplicationStatus
+TeacherService --> JdbcTemplate : update / query
+TeacherService ..> TeacherProfile : loads
+TeacherProfile --> School
+TeacherProfile --> ApplicationStatus
+note bottom of AdminController
+Scenario view shows review-related members.
+Other controller/service members are omitted.
+Security and MVC validation are framework boundaries.
+end note
+@enduml

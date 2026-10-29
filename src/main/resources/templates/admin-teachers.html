@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+ <head th:replace="~{fragments :: head('Teachers')}">
+ </head>
+ <body>
+  <header th:replace="~{fragments :: nav(true)}">
+  </header>
+  <main>
+   <div th:replace="~{fragments :: messages}">
+   </div>
+   <p class="eyebrow">
+    Administrator
+   </p>
+   <h1>
+    Teacher records
+   </h1>
+   <p class="counts">
+    <strong th:text="${teacherCount}">
+    </strong>
+    teachers
+    <span>
+     /
+    </span>
+    <strong th:text="${schoolCount}">
+    </strong>
+    schools
+    <span>
+     /
+    </span>
+    <strong th:text="${pendingCount}">
+    </strong>
+    pending applications
+   </p>
+   <a class="button" th:href="@{/admin/teachers/new}">
+    Add teacher
+   </a>
+   <form class="filters" method="get" th:action="@{/admin/teachers}">
+    <div>
+     <label for="q">
+      Search name or email
+     </label>
+     <input id="q" maxlength="254" name="q" th:value="${q}"/>
+    </div>
+    <div>
+     <label for="status">
+      Application status
+     </label>
+     <select id="status" name="status">
+      <option value="">
+       All statuses
+      </option>
+      <option th:each="s : ${statuses}" th:selected="${s == status}" th:text="${s.getLabel()}" th:value="${s}">
+      </option>
+     </select>
+    </div>
+    <button type="submit">
+     Search teachers
+    </button>
+    <a th:href="@{/admin/teachers}">
+     Clear
+    </a>
+   </form>
+   <div class="table-wrap">
+    <table>
+     <caption>
+      Teacher applications
+     </caption>
+     <thead>
+      <tr>
+       <th>
+        Name
+       </th>
+       <th>
+        Email
+       </th>
+       <th>
+        School
+       </th>
+       <th>
+        Status
+       </th>
+       <th>
+        Record
+       </th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr th:each="t : ${teachers}">
+       <td th:text="${t.name()}">
+       </td>
+       <td th:text="${t.email()}">
+       </td>
+       <td th:text="${t.school().name()}">
+       </td>
+       <td>
+        <span class="status" th:classappend="${t.status().name().toLowerCase()}" th:text="${t.status().getLabel()}">
+        </span>
+       </td>
+       <td>
+        <a th:aria-label="${'Open record for ' + t.name()}" th:href="@{/admin/teachers/{id}(id=${t.accountId()})}">
+         Open record
+        </a>
+       </td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(teachers)}">
+       <td colspan="5">
+        No teachers match your search.
+       </td>
+      </tr>
+     </tbody>
+    </table>
+   </div>
+  </main>
+  <footer th:replace="~{fragments :: footer}">
+  </footer>
+ </body>
+</html>

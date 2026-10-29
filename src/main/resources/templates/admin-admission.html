@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+ <head th:replace="~{fragments :: head('Waiting-room settings')}">
+ </head>
+ <body>
+  <header th:replace="~{fragments :: nav(true)}">
+  </header>
+  <main>
+   <div th:replace="~{fragments :: messages}">
+   </div>
+   <p class="eyebrow">
+    Administrator
+   </p>
+   <h1>
+    Waiting-room settings
+   </h1>
+   <p>
+    Limit distinct teacher accounts in the teacher area. Administrators always bypass this limit.
+   </p>
+   <div class="columns">
+    <section>
+     <h2>
+      Admission settings
+     </h2>
+     <form method="post" th:action="@{/admin/admission}" th:object="${form}">
+      <div th:replace="~{fragments :: errors}">
+      </div>
+      <label for="maxActive">
+       Maximum active teachers
+      </label>
+      <input id="maxActive" max="1000" min="1" required="" th:field="*{maxActive}" type="number"/>
+      <small class="error" th:errors="*{maxActive}">
+      </small>
+      <label for="inactivitySeconds">
+       Inactivity timeout (seconds)
+      </label>
+      <input id="inactivitySeconds" max="3600" min="10" required="" th:field="*{inactivitySeconds}" type="number"/>
+      <small class="error" th:errors="*{inactivitySeconds}">
+      </small>
+      <label for="queueCapacity">
+       Maximum waiting teachers
+      </label>
+      <input id="queueCapacity" max="1000" min="1" required="" th:field="*{queueCapacity}" type="number"/>
+      <small class="error" th:errors="*{queueCapacity}">
+      </small>
+      <button type="submit">
+       Save waiting-room settings
+      </button>
+     </form>
+    </section>
+    <section>
+     <h2>
+      Current state
+     </h2>
+     <p>
+      <strong th:text="${#lists.size(queue.active())}">
+      </strong>
+      active teachers.
+      <strong th:text="${#lists.size(queue.waiting())}">
+      </strong>
+      waiting teachers.
+     </p>
+     <h3>
+      Active teachers
+     </h3>
+     <ul>
+      <li th:each="t : ${activeTeachers}" th:text="${t.name()}">
+      </li>
+      <li th:if="${#lists.isEmpty(queue.active())}">
+       No active teachers
+      </li>
+     </ul>
+     <h3>
+      Waiting in arrival order
+     </h3>
+     <ol>
+      <li th:each="t : ${waitingTeachers}" th:text="${t.name()}">
+      </li>
+      <li th:if="${#lists.isEmpty(queue.waiting())}">
+       Nobody waiting
+      </li>
+     </ol>
+     <a th:href="@{/admin/admission}">
+      Refresh current state
+     </a>
+    </section>
+   </div>
+   <section>
+    <h2>
+     How inactivity works
+    </h2>
+    <p>
+     Navigation, profile submissions, and typing or clicking in the teacher area count as activity. Interaction signals are sent at most once every five seconds. The timeout accepts 10–3600 seconds, so normal typing can renew a place before it expires. Mouse movement, polling, static files and leaving a tab open do not count.
+    </p>
+    <p>
+     Lowering the active limit keeps current teachers admitted. New teachers enter only when the active count drops below the limit. Lowering queue capacity keeps existing waiting teachers and blocks new entries until space is available. Closing a waiting page removes that account after 15 seconds without checks.
+    </p>
+    <p>
+     Suggested lecture settings: 1 active teacher and a 25-second inactivity timeout. Admission control demonstrates a waiting room. It is not a complete DDoS defense.
+    </p>
+   </section>
+  </main>
+ </body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+ <head th:replace="~{fragments :: head('Edit profile')}">
+ </head>
+ <body>
+  <header th:replace="~{fragments :: nav(false)}">
+  </header>
+  <main class="narrow">
+   <div th:replace="~{fragments :: activity}">
+   </div>
+   <h1>
+    Edit my profile
+   </h1>
+   <p>
+    Your application status and administrator feedback stay the same when you edit your details.
+   </p>
+   <form method="post" th:action="@{/teacher/profile}" th:object="${form}">
+    <div th:replace="~{fragments :: errors}">
+    </div>
+    <div th:replace="~{fragments :: profileFields}">
+    </div>
+    <button type="submit">
+     Save my profile
+    </button>
+    <a th:href="@{/teacher/dashboard}">
+     Cancel
+    </a>
+   </form>
+  </main>
+  <footer th:replace="~{fragments :: footer}">
+  </footer>
+ </body>
+</html>

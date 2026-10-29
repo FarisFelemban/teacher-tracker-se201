@@ -1,0 +1,37 @@
+@startuml
+!pragma layout smetana
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam defaultFontName SansSerif
+skinparam defaultFontSize 14
+skinparam ArrowColor #28594F
+skinparam classBackgroundColor #F1F7F3
+skinparam classBorderColor #456B63
+skinparam classAttributeIconSize 0
+left to right direction
+title Teacher Tracker use cases
+actor Visitor
+actor Teacher
+actor Administrator
+rectangle "Teacher Tracker website" {
+ usecase "UC-01\nRegister teacher account" as UC01
+ usecase "UC-02\nSign in and out" as UC02
+ usecase "UC-03\nView application status" as UC03
+ usecase "UC-04\nEdit own profile" as UC04
+ usecase "UC-05\nReview teacher application" as UC05
+ usecase "UC-06\nManage schools" as UC06
+ usecase "UC-07\nConfigure admission" as UC07
+ usecase "UC-08\nWait for admission" as UC08
+ usecase "UC-09\nManage teacher records" as UC09
+}
+Visitor --> UC01
+Teacher --> UC02
+Teacher --> UC03
+Teacher --> UC04
+Teacher --> UC08
+Administrator --> UC02
+Administrator --> UC05
+Administrator --> UC06
+Administrator --> UC07
+Administrator --> UC09
+@enduml

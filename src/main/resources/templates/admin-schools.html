@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+ <head th:replace="~{fragments :: head('Schools')}">
+ </head>
+ <body>
+  <header th:replace="~{fragments :: nav(true)}">
+  </header>
+  <main>
+   <div th:replace="~{fragments :: messages}">
+   </div>
+   <h1>
+    Schools
+   </h1>
+   <p>
+    Teachers select from this list when they apply. A school in use cannot be deleted.
+   </p>
+   <div class="table-wrap">
+    <table>
+     <caption>
+      Available schools
+     </caption>
+     <thead>
+      <tr>
+       <th>
+        Name
+       </th>
+       <th>
+        City
+       </th>
+       <th>
+        Actions
+       </th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr th:each="s : ${schools}">
+       <td th:text="${s.name()}">
+       </td>
+       <td th:text="${s.city()}">
+       </td>
+       <td class="actions">
+        <a th:href="@{/admin/schools/{id}(id=${s.id()})}">
+         Edit school
+        </a>
+        <form method="post" th:action="@{/admin/schools/{id}/delete(id=${s.id()})}">
+         <button class="quiet danger-text" type="submit">
+          Delete school
+         </button>
+        </form>
+       </td>
+      </tr>
+     </tbody>
+    </table>
+   </div>
+   <section class="narrow">
+    <h2>
+     Add school
+    </h2>
+    <form method="post" th:action="@{/admin/schools}" th:object="${form}">
+     <div th:replace="~{fragments :: errors}">
+     </div>
+     <label for="name">
+      School name
+     </label>
+     <input id="name" maxlength="120" required="" th:field="*{name}"/>
+     <small class="error" th:errors="*{name}">
+     </small>
+     <label for="city">
+      City
+     </label>
+     <input id="city" maxlength="120" required="" th:field="*{city}"/>
+     <small class="error" th:errors="*{city}">
+     </small>
+     <button type="submit">
+      Add school
+     </button>
+    </form>
+   </section>
+  </main>
+ </body>
+</html>

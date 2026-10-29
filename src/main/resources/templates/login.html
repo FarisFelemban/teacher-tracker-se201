@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+ <head th:replace="~{fragments :: head('Sign in')}">
+ </head>
+ <body>
+  <header>
+   <a class="brand" th:href="@{/login}">
+    Teacher Tracker
+    <span>
+     SE 201
+    </span>
+   </a>
+   <a th:href="@{/register}">
+    Create teacher account
+   </a>
+  </header>
+  <main class="narrow">
+   <p class="eyebrow">
+    Teacher applications
+   </p>
+   <h1>
+    Welcome back
+   </h1>
+   <p>
+    Sign in to view your application or manage teacher records.
+   </p>
+   <div th:replace="~{fragments :: messages}">
+   </div>
+   <p class="error" role="alert" th:if="${param.error}">
+    Email or password was incorrect.
+   </p>
+   <p class="notice" th:if="${param.logout}">
+    You have logged out.
+   </p>
+   <p class="error" th:if="${param.deleted}">
+    This account is no longer available.
+   </p>
+   <form method="post" th:action="@{/login}">
+    <label for="email">
+     Email address
+    </label>
+    <input autocomplete="username" id="email" maxlength="254" name="email" required="" type="email"/>
+    <label for="password">
+     Password
+    </label>
+    <input autocomplete="current-password" id="password" name="password" required="" type="password"/>
+    <button type="submit">
+     Sign in
+    </button>
+   </form>
+   <p>
+    New here?
+    <a th:href="@{/register}">
+     Apply as a teacher
+    </a>
+    .
+   </p>
+  </main>
+  <footer th:replace="~{fragments :: footer}">
+  </footer>
+ </body>
+</html>

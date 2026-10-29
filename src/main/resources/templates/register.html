@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+ <head th:replace="~{fragments :: head('Register')}">
+ </head>
+ <body>
+  <header>
+   <a class="brand" th:href="@{/login}">
+    Teacher Tracker
+    <span>
+     SE 201
+    </span>
+   </a>
+   <a th:href="@{/login}">
+    Sign in
+   </a>
+  </header>
+  <main class="narrow">
+   <p class="eyebrow">
+    Join your school
+   </p>
+   <h1>
+    Teacher application
+   </h1>
+   <p>
+    Create an account to follow your application and keep your details up to date.
+   </p>
+   <form method="post" th:action="@{/register}" th:object="${form}">
+    <div th:replace="~{fragments :: errors}">
+    </div>
+    <div th:replace="~{fragments :: profileFields}">
+    </div>
+    <label for="password">
+     Password
+    </label>
+    <input autocomplete="new-password" id="password" maxlength="64" minlength="10" name="password" required="" type="password"/>
+    <small>
+     Use 10–64 ASCII characters. Choose a password you do not use elsewhere.
+    </small>
+    <small class="error" th:errors="*{password}">
+    </small>
+    <button type="submit">
+     Create teacher account
+    </button>
+   </form>
+  </main>
+  <footer th:replace="~{fragments :: footer}">
+  </footer>
+ </body>
+</html>
